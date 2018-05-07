@@ -3,11 +3,20 @@ import request from 'supertest'
 import app from '../app'
 import faker from 'faker'
 import mongoose from 'mongoose'
+import databaseHelper from '../bin/emptyDb'
+
+// Clean DB
+databaseHelper.emptyEntrantDb()
+databaseHelper.emptyUserDb()
+
+// Tests
 
 test('Create an entrant', async t => {
   const entrant = {
+    firstName: faker.name.findName(),
+    lastName: faker.name.findName(),
     email: faker.internet.email(),
-    pictureId: '98787hjhasdghjg',
+    pictureUrl: faker.image.imageUrl(),
     location: { type: 'Point', coordinates: [-564638, 332432] }
   }
 
@@ -42,8 +51,10 @@ test('Create an user', async t => {
 
 test('Make a votation', async t => {
   const entrant = {
+    firstName: faker.name.findName(),
+    lastName: faker.name.findName(),
     email: faker.internet.email(),
-    pictureId: '98787hjhasdghjg',
+    pictureUrl: faker.image.imageUrl(),
     location: { type: 'Point', coordinates: [-564638, 332432] }
   }
 

@@ -10,10 +10,12 @@ const emailValidator = [
 
 const UserSchema = mongoose.Schema({
   firstName: {
-    type: String
+    type: String,
+    required: true
   },
   lastName: {
-    type: String
+    type: String,
+    required: true
   },
   email: {
     type: String,
