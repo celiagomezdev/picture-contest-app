@@ -17,3 +17,23 @@ test('Create an entrant', async t => {
 
   t.is(res.status, 200)
 })
+
+test('Create an user', async t => {
+  const user = {
+    firstName: faker.name.findName(),
+    lastName: faker.name.findName(),
+    email: faker.internet.email(),
+    votations: [
+      {
+        votationStarted: Date.now(),
+        entrantsId: ['kjsadksadkgshk876', 'hasghjsghjsgdjhs']
+      }
+    ]
+  }
+
+  const res = await request(app)
+    .post('/contest/user')
+    .send(user)
+
+  t.is(res.status, 200)
+})

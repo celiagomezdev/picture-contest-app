@@ -21,12 +21,12 @@ const UserSchema = mongoose.Schema({
     unique: true,
     validate: emailValidator
   },
-  votation: [
+  votations: [
     {
       votationStarted: Date,
-      entrants: [
+      entrantsId: [
         {
-          type: mongoose.Schema.Types.ObjectId,
+          type: String,
           max: [3, 'You can only vote 3 entrants every 10 minutes']
         }
       ]

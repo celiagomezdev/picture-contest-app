@@ -8,6 +8,7 @@ const UserService = require('../services/user-service')
 
 router.post('/entrant', async (req, res, next) => {
   const entrant = await EntrantService.add(req.body)
+  console.log(entrant)
   res.send(entrant)
 })
 
@@ -15,6 +16,7 @@ router.post('/entrant', async (req, res, next) => {
 
 router.post('/user', async (req, res, next) => {
   const user = await UserService.add(req.body)
+  console.log(user)
   res.send(user)
 })
 
