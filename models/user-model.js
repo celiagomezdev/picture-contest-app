@@ -23,7 +23,7 @@ const UserSchema = mongoose.Schema({
   },
   votation: [
     {
-      votationStarted: Date(),
+      votationStarted: Date,
       entrants: [
         {
           type: mongoose.Schema.Types.ObjectId,
@@ -34,6 +34,6 @@ const UserSchema = mongoose.Schema({
   ]
 })
 
-const UserModel = mongoose.model('User', UserModel)
+const UserModel = mongoose.model('User', UserSchema)
 
 module.exports = UserModel
