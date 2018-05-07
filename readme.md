@@ -129,7 +129,7 @@ If the votation is succesful, the entrant votes (an array with the userIds that 
 
 On the other hand, the user information will also be updated with the entrantId and time of votation.
 
-Every user can only vote 3 entrants every 10 minutes. This will be correctly handled by the route checks and will show any encoutered error to the user. (Pending)
+Every user can only vote 3 entrants every 10 minutes. This will be correctly handled by the route checks and will show any encoutered error to the user. (Feature under construction in branch feature/voting)
 
 ### Helpful Software
 
@@ -137,6 +137,6 @@ Every user can only vote 3 entrants every 10 minutes. This will be correctly han
 
 * You can use [Axios](https://github.com/axios/axios) or [Postman](https://www.getpostman.com/) to perform the GET and POST requests.
 
--TODO
+### TODO
 
 * Improve voting system avoiding more then 3 votes every 10 minutes (Feature under construction in branch feature/voting)
