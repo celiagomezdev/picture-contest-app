@@ -11,6 +11,10 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 app.use(cookieParser())
 app.set('view engine', 'pug')
 
+const pictureContest = require('./routes/picture-contest')
+
+app.use('/contest', pictureContest)
+
 app.get('/', async (req, res, next) => {
   res.render('index')
 })
