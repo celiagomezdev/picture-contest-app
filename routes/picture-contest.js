@@ -28,42 +28,42 @@ router.post('/votation', async (req, res, next) => {
   console.log(user)
   console.log(user.votationIsAllowed())
 
-  // if (user.votationIsAllowed()) {
-  //   console.log('reached votation is allowed')
-  //   const updatedEntrant = await EntrantService.update(
-  //     req.body.entrantId,
-  //     { $push: { votes: req.body.userId } },
-  //     { new: true }
-  //   )
-  //   console.log(updatedEntrant)
-  //   const updatedUser = await UserService.update(
-  //     req.body.userId,
-  //     {
-  //       votations: {
-  //         $push: { entrantsId: req.body.entrantId }
-  //       }
-  //     },
-  //     { new: true }
-  //   )
+  if (user.votationIsAllowed()) {
+    console.log('reached votation is allowed')
+    const updatedEntrant = await EntrantService.update(
+      req.body.entrantId,
+      { $push: { votes: req.body.userId } },
+      { new: true }
+    )
+    console.log(updatedEntrant)
+    const updatedUser = await UserService.update(
+      req.body.userId,
+      {
+        votations: {
+          $push: { entrantsId: req.body.entrantId }
+        }
+      },
+      { new: true }
+    )
 
-  //   console.log(updatedUser)
-  // }
+    console.log(updatedUser)
+  }
 
-  // console.log('NOT reached votation is allowed')
-  // const updatedEntrant = await EntrantService.update(
-  //   req.body.entrantId,
-  //   { $push: { votes: req.body.userId } },
-  //   { new: true }
-  // )
+  console.log('NOT reached votation is allowed')
+  const updatedEntrant = await EntrantService.update(
+    req.body.entrantId,
+    { $push: { votes: req.body.userId } },
+    { new: true }
+  )
 
-  // const updatedUser = await UserService.update(req.body.userId, {
-  //   $push: {
-  //     votations: { votationStarted: Date.now(), entrantsId: req.body.entrantId }
-  //   }
-  // })
-  // console.log(updatedEntrant)
-  // console.log(updatedUser)
-  // res.send(updatedEntrant)
+  const updatedUser = await UserService.update(req.body.userId, {
+    $push: {
+      votations: { votationStarted: Date.now(), entrantsId: req.body.entrantId }
+    }
+  })
+  console.log(updatedEntrant)
+  console.log(updatedUser)
+  res.send(updatedEntrant)
 })
 
 module.exports = router
