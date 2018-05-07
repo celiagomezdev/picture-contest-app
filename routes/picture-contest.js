@@ -48,8 +48,10 @@ router.post('/votation', async (req, res, next) => {
     const updatedUser = await UserModel.findByIdAndUpdate(
       { _id: req.body.userId },
       {
-        votations: {
-          $push: { entrantsId: req.body.entrantId }
+        $push: {
+          votations: {
+            $push: { entrantsId: req.body.entrantId }
+          }
         }
       },
       { new: true }
