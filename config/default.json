@@ -1,0 +1,3 @@
+{
+  "mongoDevUrl": "mongodb://localhost/picture-contest-dev"
+}
