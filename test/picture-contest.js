@@ -3,6 +3,13 @@ import request from 'supertest'
 import app from '../app'
 import faker from 'faker'
 import mongoose from 'mongoose'
+import databaseHelper from '../bin/emptyDb'
+
+// Clean DB
+databaseHelper.emptyEntrantDb()
+databaseHelper.emptyUserDb()
+
+// Tests
 
 test('Create an entrant', async t => {
   const entrant = {
