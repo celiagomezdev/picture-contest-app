@@ -81,9 +81,128 @@ test('Make a votation', async t => {
     userId: userRes.body._id
   }
 
-  const reservationRes = await request(app)
+  const votationRes = await request(app)
     .post('/contest/votation')
     .send(votationBodyReq)
 
-  t.is(reservationRes.status, 200)
+  t.is(votationRes.status, 200)
+})
+
+test('Avoid making more than 3 votation in 10 minutes', async t => {
+  //Create 4 entrants
+  const entrantOne = {
+    firstName: faker.name.findName(),
+    lastName: faker.name.findName(),
+    email: faker.internet.email(),
+    pictureUrl: faker.image.imageUrl(),
+    location: { type: 'Point', coordinates: [-564638, 332432] }
+  }
+
+  const entrantOneRes = await request(app)
+    .post('/contest/entrant')
+    .send(entrantOne)
+
+  t.is(entrantOneRes.status, 200)
+
+  const entrantTwo = {
+    firstName: faker.name.findName(),
+    lastName: faker.name.findName(),
+    email: faker.internet.email(),
+    pictureUrl: faker.image.imageUrl(),
+    location: { type: 'Point', coordinates: [-564638, 332432] }
+  }
+
+  const entrantTwoRes = await request(app)
+    .post('/contest/entrant')
+    .send(entrantTwo)
+
+  t.is(entrantTwoRes.status, 200)
+
+  const entrantThree = {
+    firstName: faker.name.findName(),
+    lastName: faker.name.findName(),
+    email: faker.internet.email(),
+    pictureUrl: faker.image.imageUrl(),
+    location: { type: 'Point', coordinates: [-564638, 332432] }
+  }
+
+  const entrantThreeRes = await request(app)
+    .post('/contest/entrant')
+    .send(entrantThree)
+
+  t.is(entrantThreeRes.status, 200)
+
+  const entrantFour = {
+    firstName: faker.name.findName(),
+    lastName: faker.name.findName(),
+    email: faker.internet.email(),
+    pictureUrl: faker.image.imageUrl(),
+    location: { type: 'Point', coordinates: [-564638, 332432] }
+  }
+
+  const entrantFourRes = await request(app)
+    .post('/contest/entrant')
+    .send(entrantFour)
+
+  t.is(entrantFourRes.status, 200)
+
+  //Create User
+
+  const user = {
+    firstName: faker.name.findName(),
+    lastName: faker.name.findName(),
+    email: faker.internet.email()
+  }
+
+  const userRes = await request(app)
+    .post('/contest/user')
+    .send(user)
+
+  t.is(userRes.status, 200)
+
+  //Make four votations in less than 10 minutes
+
+  const votationBodyReq = {
+    entrantId: entrantOneRes.body._id,
+    userId: userRes.body._id
+  }
+
+  const votationRes = await request(app)
+    .post('/contest/votation')
+    .send(votationBodyReq)
+
+  t.is(votationRes.status, 200)
+
+  const votationTwoBodyReq = {
+    entrantId: entrantTwoRes.body._id,
+    userId: userRes.body._id
+  }
+
+  const votationTwoRes = await request(app)
+    .post('/contest/votation')
+    .send(votationTwoBodyReq)
+
+  t.is(votationTwoRes.status, 200)
+
+  const votationThreeBodyReq = {
+    entrantId: entrantThreeRes.body._id,
+    userId: userRes.body._id
+  }
+
+  const votationThreeRes = await request(app)
+    .post('/contest/votation')
+    .send(votationThreeBodyReq)
+
+  t.is(votationThreeRes.status, 200)
+
+  const votationFourBodyReq = {
+    entrantId: entrantFourRes.body._id,
+    userId: userRes.body._id
+  }
+
+  const votationFourRes = await request(app)
+    .post('/contest/votation')
+    .send(votationFourBodyReq)
+
+  t.is(votationFourRes.status, 400)
 })

@@ -38,21 +38,37 @@ router.post('/user', async (req, res, next) => {
 router.post('/votation', async (req, res, next) => {
   const user = await UserService.find(req.body.userId)
 
-  if (user.votationIsAllowed()) {
-    console.log('reached votation is allowed')
+  if (user.votations.length > 0 && user.votationIsAllowed()) {
     const updatedEntrant = await EntrantModel.findByIdAndUpdate(
       { _id: req.body.entrantId },
       { $push: { votes: req.body.userId } },
       { new: true }
     )
-    console.log(updatedEntrant)
 
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      { _id: req.body.userId },
+      {
+        votations: {
+          $push: { entrantsId: req.body.entrantId }
+        }
+      },
+      { new: true }
+    )
+
+    res.send(updatedUser)
+  } else {
+    const updatedEntrant = await EntrantModel.findByIdAndUpdate(
+      { _id: req.body.entrantId },
+      { $push: { votes: req.body.userId } },
+      { new: true }
+    )
     const updatedUser = await UserModel.findByIdAndUpdate(
       { _id: req.body.userId },
       {
         $push: {
           votations: {
-            $push: { entrantsId: req.body.entrantId }
+            votationStarted: Date.now(),
+            entrantsId: req.body.entrantId
           }
         }
       },
@@ -60,76 +76,7 @@ router.post('/votation', async (req, res, next) => {
     )
 
     res.send(updatedUser)
-    console.log(updatedUser)
   }
-
-  const updatedEntrant = await EntrantModel.findByIdAndUpdate(
-    { _id: req.body.entrantId },
-    { $push: { votes: req.body.userId } },
-    { new: true }
-  )
-  const updatedUser = await UserModel.findByIdAndUpdate(
-    { _id: req.body.userId },
-    {
-      $push: {
-        votations: {
-          votationStarted: Date.now(),
-          $push: { entrantsId: req.body.entrantId }
-        }
-      }
-    },
-    { new: true }
-  )
-
-  res.send(updatedUser)
 })
-
-// //Voting route
-
-// router.post('/votation', async (req, res, next) => {
-//   const entrant = await EntrantService.find(req.body.entrantId)
-//   const user = await UserService.find(req.body.userId)
-//   console.log(req.body.entrantId)
-//   console.log(req.body.userId)
-//   console.log(user)
-//   console.log(user.votationIsAllowed())
-
-//   if (user.votationIsAllowed()) {
-//     console.log('reached votation is allowed')
-//     const updatedEntrant = await EntrantService.update(
-//       req.body.entrantId,
-//       { $push: { votes: req.body.userId } },
-//       { new: true }
-//     )
-//     console.log(updatedEntrant)
-//     const updatedUser = await UserService.update(
-//       req.body.userId,
-//       {
-//         votations: {
-//           $push: { entrantsId: req.body.entrantId }
-//         }
-//       },
-//       { new: true }
-//     )
-
-//     console.log(updatedUser)
-//   }
-
-//   console.log('NOT reached votation is allowed')
-//   const updatedEntrant = await EntrantService.update(
-//     req.body.entrantId,
-//     { $push: { votes: req.body.userId } },
-//     { new: true }
-//   )
-
-//   const updatedUser = await UserService.update(req.body.userId, {
-//     $push: {
-//       votations: { votationStarted: Date.now(), entrantsId: req.body.entrantId }
-//     }
-//   })
-//   console.log(updatedEntrant)
-//   console.log(updatedUser)
-//   res.send(updatedEntrant)
-// })
 
 module.exports = router
