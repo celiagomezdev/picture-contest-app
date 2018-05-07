@@ -9,13 +9,19 @@ const emailValidator = [
 ]
 
 const EntrantSchema = mongoose.Schema({
+  firstName: {
+    type: String
+  },
+  lastName: {
+    type: String
+  },
   email: {
     type: String,
     required: true,
     unique: true,
     validate: emailValidator
   },
-  pictureId: {
+  pictureUrl: {
     type: String,
     required: true
   },

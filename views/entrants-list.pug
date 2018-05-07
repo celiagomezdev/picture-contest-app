@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h1 Picture Contest Entrants list
+    h2 Number of entrants: #{entrants.length}
+    if entrants.length
+      ul
+        each entrant, index in entrants 
+
+          p #{index + 1}. <b>Name</b>: "#{entrant.firstName} #{entrant.lastName}". <b>Votes</b>: #{entrant.votes.length}. 
+          
+    else
+      p There are no entrants yet :(
+        
+    script.
+      console.log(!JSON.stringify(entrants))

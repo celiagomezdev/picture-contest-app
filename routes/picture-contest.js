@@ -6,6 +6,12 @@ const UserService = require('../services/user-service')
 
 //Entrant Routes
 
+router.get('/entrant/all', async (req, res, next) => {
+  const entrants = await EntrantService.findAll()
+
+  res.render('entrants-list', { entrants })
+})
+
 router.post('/entrant', async (req, res, next) => {
   const entrant = await EntrantService.add(req.body)
   console.log(entrant)

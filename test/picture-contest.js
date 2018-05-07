@@ -6,8 +6,10 @@ import mongoose from 'mongoose'
 
 test('Create an entrant', async t => {
   const entrant = {
+    firstName: faker.name.findName(),
+    lastName: faker.name.findName(),
     email: faker.internet.email(),
-    pictureId: '98787hjhasdghjg',
+    pictureUrl: faker.image.imageUrl(),
     location: { type: 'Point', coordinates: [-564638, 332432] }
   }
 
