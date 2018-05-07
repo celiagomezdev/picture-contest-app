@@ -20,4 +20,39 @@ router.post('/user', async (req, res, next) => {
   res.send(user)
 })
 
+//Voting route
+
+router.post('/votation', async (req, res, next) => {
+  const entrant = await EntrantService.find(req.body.entrantId)
+  const user = await UserService.find(req.body.userId)
+
+  if (user.votationIsAllowed()) {
+    const updatedEntrant = await EntrantService.update(
+      req.body.entrantId,
+      { $push: { votes: req.body.userId } },
+      { new: true }
+    )
+
+    const updatedUser = await UserService.update(req.body.userId, {
+      votations: {
+        $push: { entrantsId: req.body.entrantId }
+      }
+    })
+  }
+
+  const updatedEntrant = await EntrantService.update(
+    req.body.entrantId,
+    { $push: { votes: req.body.userId } },
+    { new: true }
+  )
+
+  const updatedUser = await UserService.update(req.body.userId, {
+    $push: {
+      votations: { votationStarted: Date.now(), entrantsId: req.body.entrantId }
+    }
+  })
+
+  res.send(updatedEntrant)
+})
+
 module.exports = router

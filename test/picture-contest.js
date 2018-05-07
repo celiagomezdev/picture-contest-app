@@ -37,3 +37,36 @@ test('Create an user', async t => {
 
   t.is(res.status, 200)
 })
+
+//Make a votation
+
+test('Make a votation', async t => {
+  const entrant = {
+    email: faker.internet.email(),
+    pictureId: '98787hjhasdghjg',
+    location: { type: 'Point', coordinates: [-564638, 332432] }
+  }
+
+  const entrantRes = await request(app)
+    .post('/contest/entrant')
+    .send(entrant)
+
+  t.is(entrantRes.status, 200)
+
+  const user = {
+    firstName: faker.name.findName(),
+    lastName: faker.name.findName(),
+    email: faker.internet.email()
+  }
+
+  const userRes = await request(app)
+    .post('/contest/user')
+    .send(user)
+
+  t.is(userRes.status, 200)
+
+  const votationBodyReq = {
+    entrantId: entrantRes.body._id,
+    userId: userRes.body._id
+  }
+})
