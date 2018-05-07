@@ -69,4 +69,10 @@ test('Make a votation', async t => {
     entrantId: entrantRes.body._id,
     userId: userRes.body._id
   }
+
+  const reservationRes = await request(app)
+    .post('/contest/votation')
+    .send(votationBodyReq)
+
+  t.is(reservationRes.status, 200)
 })
