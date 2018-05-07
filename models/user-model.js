@@ -37,7 +37,7 @@ const UserSchema = mongoose.Schema({
 })
 
 UserSchema.methods.votationIsAllowed = function votationIsAllowed() {
-  if (votations.length > 0) {
+  if (this.votations.length > 0) {
     const lastVotation = this.votations[this.votations.length - 1]
     return (Date.now() - lastVotation['votationStarted']) / 1000 < 600
   }

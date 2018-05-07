@@ -36,6 +36,33 @@ router.post('/user', async (req, res, next) => {
 //Votation Route
 
 router.post('/votation', async (req, res, next) => {
+  const user = await UserService.find(req.body.userId)
+
+  if (user.votationIsAllowed()) {
+    console.log('reached votation is allowed')
+    const updatedEntrant = await EntrantModel.findByIdAndUpdate(
+      { _id: req.body.entrantId },
+      { $push: { votes: req.body.userId } },
+      { new: true }
+    )
+    console.log(updatedEntrant)
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      { _id: req.body.userId },
+      {
+        $push: {
+          votations: {
+            $push: { entrantsId: req.body.entrantId }
+          }
+        }
+      },
+      { new: true }
+    )
+
+    res.send(updatedUser)
+    console.log(updatedUser)
+  }
+
   const updatedEntrant = await EntrantModel.findByIdAndUpdate(
     { _id: req.body.entrantId },
     { $push: { votes: req.body.userId } },
@@ -47,14 +74,14 @@ router.post('/votation', async (req, res, next) => {
       $push: {
         votations: {
           votationStarted: Date.now(),
-          $push: { entrantsId: req.body.entrantsId }
+          $push: { entrantsId: req.body.entrantId }
         }
       }
     },
     { new: true }
   )
 
-  res.send(updatedEntrant)
+  res.send(updatedUser)
 })
 
 // //Voting route
