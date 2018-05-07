@@ -51,6 +51,20 @@ To get the Node server running locally:
 
 * `ìndex.html` - This html file will define our main view structure to be afterwards modelated by our different pug views. Here we will also implement the axios script that will allow us to make real time POST and GET requests from the Google Chrome console.
 
+### Error Handling
+
+In the file `app.js` we define our error-handling middleware for handling any possible error in our application and be able to show error messages that the user/client can understand.
+
+> Every Error ocurred at the database or Schema level will be propagated until this stage to be properly handled.
+
+We will consider different types of error:
+
+* [409](https://httpstatuses.com/409) - When the user/entrant tries to use an email that has been already used for another user.
+
+* [400](https://httpstatuses.com/400) - When the user introduces empty or non valid data in the request.
+
+* [500](https://httpstatuses.com/500) - When any other internal error ocurrs.
+
 ### API Endpoints
 
 #### Get a list of entrants with their votations
@@ -106,16 +120,16 @@ Example:
 ```
 
 ```
-body: { entrantId: **THE_USER_ID**, userId: **THE_ENTRANT_ID**}
+body: { entrantId: **THE_ENTRANT_ID**, userId: **THE_USER_ID**}
 ```
 
 `entrantId` and `userId` are required fields.
 
-If the votation is succesful, the entrant votes (an array with the userIds that performed the vote) will be updated. This way it will be easy to count and will also allow us to get more information about the user that performed the vote.
+If the votation is succesful, the entrant votes (an array with the userIds that performed the vote) will be updated. This way the votes will be easy to count and will also allow us to get more information about the user that performed the vote.
 
-On the other hand, the user information will also be updated with the entrantId and time of votation, in order to prevent multiple votations done by the same user.
+On the other hand, the user information will also be updated with the entrantId and time of votation.
 
-Every user can only vote 3 entrants every 10 minutes. This will be correctly handled by the route checks and will showed any encoutered error to the user. (Pending)
+Every user can only vote 3 entrants every 10 minutes. This will be correctly handled by the route checks and will show any encoutered error to the user. (Pending)
 
 ### Helpful Software
 
@@ -123,6 +137,6 @@ Every user can only vote 3 entrants every 10 minutes. This will be correctly han
 
 * You can use [Axios](https://github.com/axios/axios) or [Postman](https://www.getpostman.com/) to perform the GET and POST requests.
 
-###TODO
+-TODO
 
-* Implement voting system avoiding more then 3 votes every 10 minutes (Feature under construction in branch feature/voting)
+* Improve voting system avoiding more then 3 votes every 10 minutes (Feature under construction in branch feature/voting)

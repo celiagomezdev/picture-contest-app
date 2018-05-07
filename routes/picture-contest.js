@@ -10,22 +10,27 @@ const UserModel = require('../models/user-model')
 
 router.get('/entrant/all', async (req, res, next) => {
   const entrants = await EntrantService.findAll()
-
   res.render('entrants-list', { entrants })
 })
 
 router.post('/entrant', async (req, res, next) => {
-  const entrant = await EntrantService.add(req.body)
-  console.log(entrant)
-  res.send(entrant)
+  try {
+    const entrant = await EntrantService.add(req.body)
+    res.send(entrant)
+  } catch (err) {
+    next(err)
+  }
 })
 
 //User Routes
 
 router.post('/user', async (req, res, next) => {
-  const user = await UserService.add(req.body)
-  console.log(user)
-  res.send(user)
+  try {
+    const user = await UserService.add(req.body)
+    res.send(user)
+  } catch (err) {
+    next(err)
+  }
 })
 
 //Votation Route

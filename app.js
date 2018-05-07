@@ -14,9 +14,45 @@ app.set('view engine', 'pug')
 const pictureContest = require('./routes/picture-contest')
 
 app.use('/contest', pictureContest)
+app.use(logErrors)
+app.use(databaseErrorHandler)
+app.use(validationErrorHandler)
+app.use(errorHandler)
 
 app.get('/', async (req, res, next) => {
   res.render('index')
 })
+
+//Express Error Handlers
+function logErrors(err, req, res, next) {
+  console.error(`Error name: ${err.name}, message: ${err.message}.`)
+  next(err)
+}
+
+function databaseErrorHandler(err, req, res, next) {
+  if (err.name === 'MongoError' && err.code === 11000) {
+    return res.status(409).send({
+      message: 'This email has already been registered 😭. Please try another.'
+    })
+  } else {
+    next(err)
+  }
+}
+
+function validationErrorHandler(err, req, res, next) {
+  if (err.name === 'ValidationError') {
+    return res.status(400).send({
+      message: err.message
+    })
+  } else {
+    next(err)
+  }
+}
+
+function errorHandler(err, req, res, next) {
+  return res.status(500).send({
+    message: `I'm sorry, there was an error. Try again. 🙏`
+  })
+}
 
 module.exports = app
