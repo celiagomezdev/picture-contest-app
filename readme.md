@@ -2,6 +2,8 @@
 
 ### Backend application implemented as a REST API for a picture contest application
 
+> The app lists all the entrants with their favourite sight. The entrant model stores a location as it will be showed as pin in a map at the frontend. The user can vote a maximum of 3 entrants every 10 minutes, and those votes will be updated in real time.
+
 **Technology used**: Node.js, Express.js, MongoDB and mongoose.js
 
 ## Getting started
@@ -91,7 +93,7 @@ Example:
 { firstName: 'Joan', lastName: 'López', email: 'joanlopez567@gmail.com', pictureUrl: "http://...", location: { type: 'Point', coordinates: [-564638, 332432] }
 ```
 
-`email` is a required and unique field. If there is already an entrant in the database with the same email, the user will receive a `409` response with the informative error.
+All fields are required, as we will need them for the different features of the app (like `pictureUrl` or `location` to show it on the map).`email` is an unique field, so if there is already an entrant in the database with the same email, the user will receive a `409` response with the informative error.
 
 #### Add a new user
 
@@ -109,7 +111,7 @@ Example:
 { firstName: 'Marina', lastName: 'Heart', email: 'mar_heart@gmail.com'}
 ```
 
-`email` is a required and unique field. If there is already an entrant in the database with the same email, the user will receive a `409` response with the informative error.
+`email` is a required and unique field. If there is already an user in the database with the same email, the user will receive a `409` response with the informative error.
 
 #### Make a votation
 
@@ -139,4 +141,4 @@ Every user can only vote 3 entrants every 10 minutes. This will be correctly han
 
 ### TODO
 
-* Improve voting system avoiding more then 3 votes every 10 minutes (Feature under construction in branch feature/voting)
+* Improve voting system avoiding more than 3 votes every 10 minutes (Feature under construction in branch feature/voting)
