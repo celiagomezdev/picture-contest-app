@@ -37,8 +37,10 @@ router.post('/user', async (req, res, next) => {
 
 router.post('/votation', async (req, res, next) => {
   const user = await UserService.find(req.body.userId)
+  console.log(user.votations.length)
 
   if (user.votations.length > 0 && user.votationIsAllowed()) {
+    console.log('We reached first condition')
     const updatedEntrant = await EntrantModel.findByIdAndUpdate(
       { _id: req.body.entrantId },
       { $push: { votes: req.body.userId } },
@@ -49,14 +51,14 @@ router.post('/votation', async (req, res, next) => {
       { _id: req.body.userId },
       {
         $push: {
-          votations: {
-            $push: { entrantsId: req.body.entrantId }
-          }
+          'votations.0.entrantsId': req.body.entrantId
         }
       },
       { new: true }
     )
 
+    console.log(updatedEntrant.votes)
+    // console.log(JSON.stringify(updatedUser.votations[0]))
     res.send(updatedUser)
   } else {
     const updatedEntrant = await EntrantModel.findByIdAndUpdate(
@@ -71,12 +73,15 @@ router.post('/votation', async (req, res, next) => {
           votations: {
             votationStarted: Date.now(),
             entrantsId: req.body.entrantId
-          }
+          },
+          $position: 0
         }
       },
       { new: true }
     )
 
+    console.log('We reached second condition')
+    console.log(updatedEntrant.votes)
     res.send(updatedUser)
   }
 })
