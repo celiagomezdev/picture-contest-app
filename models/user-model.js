@@ -34,20 +34,6 @@ const UserSchema = mongoose.Schema({
     type: Number,
     max: [3, 'You can only vote 3 entrants every 10 minutes']
   }
-  // votations: [
-  //   {
-  //     votationStarted: Date,
-  //     entrantsId: [
-  //       {
-  //         type: String,
-  //         validate: [
-  //           arrayLimit,
-  //           'You can only vote 3 entrants every 10 minutes'
-  //         ]
-  //       }
-  //     ]
-  //   }
-  // ]
 })
 
 UserSchema.methods.votationIsAllowed = function votationIsAllowed() {
