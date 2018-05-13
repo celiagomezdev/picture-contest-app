@@ -27,25 +27,31 @@ const UserSchema = mongoose.Schema({
     unique: true,
     validate: emailValidator
   },
-  votations: [
-    {
-      votationStarted: Date,
-      entrantsId: [
-        {
-          type: String,
-          validate: [
-            arrayLimit,
-            'You can only vote 3 entrants every 10 minutes'
-          ]
-        }
-      ]
-    }
-  ]
+  votationStarted: {
+    type: Date
+  },
+  votationsAmount: {
+    type: Number,
+    max: [3, 'You can only vote 3 entrants every 10 minutes']
+  }
+  // votations: [
+  //   {
+  //     votationStarted: Date,
+  //     entrantsId: [
+  //       {
+  //         type: String,
+  //         validate: [
+  //           arrayLimit,
+  //           'You can only vote 3 entrants every 10 minutes'
+  //         ]
+  //       }
+  //     ]
+  //   }
+  // ]
 })
 
 UserSchema.methods.votationIsAllowed = function votationIsAllowed() {
-  const lastVotation = this.votations[this.votations.length - 1]
-  return (Date.now() - lastVotation['votationStarted']) / 1000 < 600
+  return (Date.now() - this.votationStarted) / 1000 < 600
 }
 
 const UserModel = mongoose.model('User', UserSchema)

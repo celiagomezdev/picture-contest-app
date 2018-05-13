@@ -34,13 +34,11 @@ router.post('/user', async (req, res, next) => {
 })
 
 //Votation Route
-
 router.post('/votation', async (req, res, next) => {
   const user = await UserService.find(req.body.userId)
-  console.log(user.votations.length)
 
-  if (user.votations.length > 0 && user.votationIsAllowed()) {
-    console.log('We reached first condition')
+  if (user.votationsAmount === undefined) {
+    console.log('First vote. We set up time of votation.')
     const updatedEntrant = await EntrantModel.findByIdAndUpdate(
       { _id: req.body.entrantId },
       { $push: { votes: req.body.userId } },
@@ -49,41 +47,92 @@ router.post('/votation', async (req, res, next) => {
 
     const updatedUser = await UserModel.findByIdAndUpdate(
       { _id: req.body.userId },
-      {
-        $push: {
-          'votations.0.entrantsId': req.body.entrantId
-        }
-      },
+      { votationStarted: Date.now(), $inc: { votationsAmount: 1 } },
       { new: true }
     )
 
-    console.log(updatedEntrant.votes)
-    // console.log(JSON.stringify(updatedUser.votations[0]))
-    res.send(updatedUser)
+    res.send(updatedEntrant)
+  } else if (user.votationIsAllowed() && user.votationsAmount > 2) {
+    console.log('Performed more than 3 votes in 10 minutes. Error.')
+    res
+      .status(400)
+      .send({ message: 'You can only perform 3 votes every 10 minutes' })
+
+    //We set votations count to 0
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      { _id: req.body.userId },
+      { votationsAmount: 0 },
+      { new: true }
+    )
   } else {
+    console.log(
+      'The user has not reach the 3 maximum votes in 10 minutes. We add one.'
+    )
     const updatedEntrant = await EntrantModel.findByIdAndUpdate(
       { _id: req.body.entrantId },
       { $push: { votes: req.body.userId } },
       { new: true }
     )
+
     const updatedUser = await UserModel.findByIdAndUpdate(
       { _id: req.body.userId },
-      {
-        $push: {
-          votations: {
-            votationStarted: Date.now(),
-            entrantsId: req.body.entrantId
-          },
-          $position: 0
-        }
-      },
+      { $inc: { votationsAmount: 1 } },
       { new: true }
     )
 
-    console.log('We reached second condition')
-    console.log(updatedEntrant.votes)
-    res.send(updatedUser)
+    res.send(updatedEntrant)
   }
 })
 
 module.exports = router
+
+// router.post('/votation', async (req, res, next) => {
+//   const user = await UserService.find(req.body.userId)
+//   console.log(user.votations.length)
+
+//   if (user.votations.length > 0 && user.votationIsAllowed()) {
+//     console.log('We reached first condition')
+//     const updatedEntrant = await EntrantModel.findByIdAndUpdate(
+//       { _id: req.body.entrantId },
+//       { $push: { votes: req.body.userId } },
+//       { new: true }
+//     )
+
+//     const updatedUser = await UserModel.findByIdAndUpdate(
+//       { _id: req.body.userId },
+//       {
+//         $push: {
+//           'votations.0.entrantsId': req.body.entrantId
+//         }
+//       },
+//       { new: true }
+//     )
+
+//     console.log(updatedEntrant.votes)
+//     // console.log(JSON.stringify(updatedUser.votations[0]))
+//     res.send(updatedUser)
+//   } else {
+//     const updatedEntrant = await EntrantModel.findByIdAndUpdate(
+//       { _id: req.body.entrantId },
+//       { $push: { votes: req.body.userId } },
+//       { new: true }
+//     )
+//     const updatedUser = await UserModel.findByIdAndUpdate(
+//       { _id: req.body.userId },
+//       {
+//         $push: {
+//           votations: {
+//             votationStarted: Date.now(),
+//             entrantsId: req.body.entrantId
+//           },
+//           $position: 0
+//         }
+//       },
+//       { new: true }
+//     )
+
+//     console.log('We reached second condition')
+//     console.log(updatedEntrant.votes)
+//     res.send(updatedUser)
+//   }
+// })
