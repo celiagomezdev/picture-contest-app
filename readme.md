@@ -90,7 +90,7 @@ The information of the entrant will be defined on the body request.
 Example:
 
 ```
-{ firstName: 'Joan', lastName: 'López', email: 'joanlopez567@gmail.com', pictureUrl: "http://...", location: { type: 'Point', coordinates: [-564638, 332432] }
+{ firstName: 'John', lastName: 'Evans', email: 'johnevans567@gmail.com', pictureUrl: "http://...", location: { type: 'Point', coordinates: [-564638, 332432] }
 ```
 
 All fields are required, as we will need them for the different features of the app (like `pictureUrl` or `location` to show it on the map).`email` is an unique field, so if there is already an entrant in the database with the same email, the user will receive a `409` response with the informative error.
@@ -129,16 +129,10 @@ body: { entrantId: **THE_ENTRANT_ID**, userId: **THE_USER_ID**}
 
 If the votation is succesful, the entrant votes (an array with the userIds that performed the vote) will be updated. This way the votes will be easy to count and will also allow us to get more information about the user that performed the vote.
 
-On the other hand, the user information will also be updated with the entrantId and time of votation.
-
-Every user can only vote 3 entrants every 10 minutes. This will be correctly handled by the route checks and will show any encoutered error to the user. (Feature under construction in branch feature/voting)
+Every user can only vote 3 entrants every 10 minutes. This will be correctly handled by the route checks and will show any encoutered error to the user.
 
 ### Helpful Software
 
 * I recommend using [Robomongo](https://robomongo.org/) (now called Robo 3T) to manage easily your MongoDB database.
 
 * You can use [Axios](https://github.com/axios/axios) or [Postman](https://www.getpostman.com/) to perform the GET and POST requests.
-
-### TODO
-
-* Improve voting system avoiding more than 3 votes every 10 minutes (Feature under construction in branch feature/voting)
