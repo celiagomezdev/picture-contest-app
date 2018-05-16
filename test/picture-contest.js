@@ -207,5 +207,5 @@ test('Avoid making more than 3 votations in 10 minutes', async t => {
   console.log(entrantFourRes.body._id)
   console.log(userRes.body._id)
 
-  t.is(votationFourRes.status, 400)
+  t.is(votationFourRes.status, 429)
 })

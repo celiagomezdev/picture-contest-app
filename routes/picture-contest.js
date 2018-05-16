@@ -3,8 +3,6 @@ const router = express.Router()
 
 const EntrantService = require('../services/entrant-service')
 const UserService = require('../services/user-service')
-const EntrantModel = require('../models/entrant-model')
-const UserModel = require('../models/user-model')
 
 //Entrant Routes
 
@@ -35,52 +33,13 @@ router.post('/user', async (req, res, next) => {
 
 //Votation Route
 router.post('/votation', async (req, res, next) => {
-  const user = await UserService.find(req.body.userId)
+  try {
+    const updatedUser = await UserService.vote(req.body.userId)
+    await EntrantService.vote(req.body.entrantId, req.body.userId)
 
-  if (user.votationsAmount === undefined) {
-    console.log('First vote. We set up time of votation.')
-    const updatedEntrant = await EntrantModel.findByIdAndUpdate(
-      { _id: req.body.entrantId },
-      { $push: { votes: req.body.userId } },
-      { new: true }
-    )
-
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      { _id: req.body.userId },
-      { votationStarted: Date.now(), $inc: { votationsAmount: 1 } },
-      { new: true }
-    )
-
-    res.send(updatedEntrant)
-  } else if (user.votationIsAllowed() && user.votationsAmount > 2) {
-    console.log('Performed more than 3 votes in 10 minutes. Error.')
-    res
-      .status(400)
-      .send({ message: 'You can only perform 3 votes every 10 minutes' })
-
-    //We set votations count to 0
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      { _id: req.body.userId },
-      { votationsAmount: 0 },
-      { new: true }
-    )
-  } else {
-    console.log(
-      'The user has not reach the 3 maximum votes in 10 minutes. We add one.'
-    )
-    const updatedEntrant = await EntrantModel.findByIdAndUpdate(
-      { _id: req.body.entrantId },
-      { $push: { votes: req.body.userId } },
-      { new: true }
-    )
-
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      { _id: req.body.userId },
-      { $inc: { votationsAmount: 1 } },
-      { new: true }
-    )
-
-    res.send(updatedEntrant)
+    res.send(updatedUser)
+  } catch (err) {
+    next(err)
   }
 })
 

@@ -17,6 +17,7 @@ app.use('/contest', pictureContest)
 app.use(logErrors)
 app.use(databaseErrorHandler)
 app.use(validationErrorHandler)
+app.use(votationErrorHandler)
 app.use(errorHandler)
 
 app.get('/', async (req, res, next) => {
@@ -42,6 +43,16 @@ function databaseErrorHandler(err, req, res, next) {
 function validationErrorHandler(err, req, res, next) {
   if (err.name === 'ValidationError') {
     return res.status(400).send({
+      message: err.message
+    })
+  } else {
+    next(err)
+  }
+}
+
+function votationErrorHandler(err, req, res, next) {
+  if (err.name === 'ExceededVotesError') {
+    return res.status(429).send({
       message: err.message
     })
   } else {

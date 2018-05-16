@@ -15,7 +15,7 @@ To get the Node server running locally:
   > If you have homebrew in your machine, use the following command in your Terminal: `brew install mongodb`. And then activate it with the command: `brew services start mongodb`.
 * `npm install` to install all the dependencies.
 * `node index.js` to start the local server (You will see logged in your console 'Server listening').
-* View in browser at http://localhost:3000
+* View in browser at http://localhost:5000
 
 ## Code Overview
 
@@ -64,6 +64,8 @@ We will consider different types of error:
 * [409](https://httpstatuses.com/409) - When the user/entrant tries to use an email that has been already used for another user.
 
 * [400](https://httpstatuses.com/400) - When the user introduces empty or non valid data in the request.
+
+* [429](https://httpstatuses.com/429) - When the user performs more than three votes in 10 minutes.
 
 * [500](https://httpstatuses.com/500) - When any other internal error ocurrs.
 

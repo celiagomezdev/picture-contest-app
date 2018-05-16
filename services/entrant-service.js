@@ -16,9 +16,18 @@ async function findByIdAndUpdate(id) {
   return EntrantModel.findByIdAndUpdate({ _id: id })
 }
 
+async function vote(entrantId, userId) {
+  return EntrantModel.findByIdAndUpdate(
+    { _id: entrantId },
+    { $push: { votes: userId } },
+    { new: true }
+  )
+}
+
 module.exports = {
   add,
   findAll,
   find,
-  findByIdAndUpdate
+  findByIdAndUpdate,
+  vote
 }

@@ -8,10 +8,6 @@ const emailValidator = [
   })
 ]
 
-const arrayLimit = value => {
-  return value.length <= 3
-}
-
 const UserSchema = mongoose.Schema({
   firstName: {
     type: String,
@@ -32,7 +28,7 @@ const UserSchema = mongoose.Schema({
   },
   votationsAmount: {
     type: Number,
-    max: [3, 'You can only vote 3 entrants every 10 minutes']
+    max: 3
   }
 })
 
